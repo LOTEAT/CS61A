@@ -21,7 +21,16 @@ def roll_dice(num_rolls, dice=six_sided):
     assert type(num_rolls) == int, 'num_rolls must be an integer.'
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    # Remember to call dice() exactly num_rolls times even if 
+    # Pig Out happens in the middle of rolling.
+    outcomes = [dice() for _ in range(num_rolls)]
+    scores = 0
+    for outcome in outcomes:
+        if outcome == 1:
+            return 1
+        scores += outcome
+    return scores
     # END PROBLEM 1
 
 
@@ -32,7 +41,9 @@ def free_bacon(score):
     """
     assert score < 100, 'The game should be over.'
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    res = 10 - score % 10 + score // 10
+    return res
     # END PROBLEM 2
 
 
@@ -50,7 +61,11 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if num_rolls > 0:
+        return roll_dice(num_rolls, dice)
+    else:
+        return free_bacon(opponent_score)
     # END PROBLEM 3
 
 
@@ -59,7 +74,11 @@ def is_swap(player_score, opponent_score):
     Return whether the two scores should be swapped
     """
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    diff = abs(player_score % 10 - opponent_score % 10)
+    if diff == opponent_score // 10:
+        return True
+    return False
     # END PROBLEM 4
 
 
@@ -99,11 +118,38 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     """
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    last_turn_score0, last_turn_score1 = 0, 0
+    turn = 0
+    while score0 < goal and score1 < goal:
+        if who == 0:
+            num_rolls = strategy0(score0, score1)
+            cur_turn_score = take_turn(num_rolls, score1, dice)
+            score0 += cur_turn_score
+            if feral_hogs and abs(last_turn_score0 - num_rolls) == 2:
+                score0 += 3
+            if is_swap(score0, score1):
+                score0, score1 = score1, score0
+            last_turn_score0 = cur_turn_score
+        else:
+            num_rolls = strategy1(score1, score0)
+            cur_turn_score = take_turn(num_rolls, score0, dice)
+            score1 += cur_turn_score
+            if feral_hogs and abs(last_turn_score1 - num_rolls) == 2:
+                score1 += 3
+            if is_swap(score1, score0):
+                score0, score1 = score1, score0
+            last_turn_score1 = cur_turn_score
+        who = other(who)
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        if turn == 0:
+            comment = say(score0, score1)
+        else:
+            comment = comment(score0, score1)
+        turn += 1
     # END PROBLEM 6
     return score0, score1
 
