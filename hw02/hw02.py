@@ -1,5 +1,7 @@
 from operator import add, mul, sub
 
+from sympy import compose
+
 square = lambda x: x * x
 
 identity = lambda x: x
@@ -30,7 +32,14 @@ def product(n, term):
     >>> product(3, triple)    # 1*3 * 2*3 * 3*3
     162
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    res, element = 1, 1
+    while element <= n:
+        res *= term(element)
+        element += 1
+    return res
+    
+
 
 
 def accumulate(combiner, base, n, term):
@@ -55,7 +64,12 @@ def accumulate(combiner, base, n, term):
     >>> accumulate(lambda x, y: (x + y) % 17, 19, 20, square)
     16
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    res, element = base, 1
+    while element <= n:
+        res = combiner(res, term(element))
+        element += 1
+    return res
 
 def summation_using_accumulate(n, term):
     """Returns the sum of term(1) + ... + term(n). The implementation
@@ -71,7 +85,8 @@ def summation_using_accumulate(n, term):
     ...       ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    return accumulate(add, 0, n, term)
 
 def product_using_accumulate(n, term):
     """An implementation of product using accumulate.
@@ -86,7 +101,8 @@ def product_using_accumulate(n, term):
     ...       ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUIION HERE ***"
+    return accumulate(mul, 1, n, term)
 
 
 def compose1(func1, func2):
@@ -109,9 +125,13 @@ def make_repeater(func, n):
     >>> make_repeater(square, 0)(5) # Yes, it makes sense to apply the function zero times!
     5
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    return accumulate(compose1, identity, n, lambda x: func)
 
-
+# f is a trap!
+# a = lambda x : x + 1
+# zero(a) = zero
+# zero(a) != a
 def zero(f):
     return lambda x: x
 
@@ -120,11 +140,18 @@ def successor(n):
 
 def one(f):
     """Church numeral 1: same as successor(zero)"""
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    def fx(x):
+        return f(x)
+    return fx
+
 
 def two(f):
     """Church numeral 2: same as successor(successor(zero))"""
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    def ffx(x):
+        return f(f(x))
+    return ffx
 
 three = successor(two)
 
@@ -140,7 +167,10 @@ def church_to_int(n):
     >>> church_to_int(three)
     3
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    def add_one(x):
+        return x + 1
+    return n(add_one)(0)
 
 def add_church(m, n):
     """Return the Church numeral for m + n, for Church numerals m and n.
@@ -148,7 +178,11 @@ def add_church(m, n):
     >>> church_to_int(add_church(two, three))
     5
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    n_int = church_to_int(n)
+    for _ in range(n_int):
+        m = successor(m)
+    return m
 
 def mul_church(m, n):
     """Return the Church numeral for m * n, for Church numerals m and n.
@@ -159,7 +193,12 @@ def mul_church(m, n):
     >>> church_to_int(mul_church(three, four))
     12
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    res = zero
+    n_int = church_to_int(n)
+    for _ in range(n_int):
+        res = add_church(res, successor(m))
+    return res
 
 def pow_church(m, n):
     """Return the Church numeral m ** n, for Church numerals m and n.
@@ -169,5 +208,10 @@ def pow_church(m, n):
     >>> church_to_int(pow_church(three, two))
     9
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    res = one
+    n_int = church_to_int(n)
+    for _ in range(n_int):
+        res = mul_church(res, successor(m))
+    return res
 
