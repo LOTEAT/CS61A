@@ -11,7 +11,12 @@ def pascal(row, column):
     >>> pascal(3, 2)	# Row 4 (1 3 3 1), 3rd entry
     3
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if row < column:
+        return 0
+    if row == 0 or row == column or column == 0:
+        return 1
+    return pascal(row - 1, column - 1) + pascal(row - 1, column)
 
 
 def compose1(f, g):
@@ -39,7 +44,10 @@ def repeated(f, n):
     ...       ['For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if n == 1:
+        return f
+    return repeated(f(f), n - 1)
 
 
 def num_eights(x):
