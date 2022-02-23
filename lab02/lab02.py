@@ -14,8 +14,8 @@ def lambda_curry2(func):
     >>> lambda_curry2(mod)(123)(10)
     3
     """
-    "*** YOUR CODE HERE ***"
-    return ______
+    "*** MY SOLUTION HERE ***"
+    return lambda x : lambda y: func(x, y)
 
 
 
@@ -46,7 +46,15 @@ def count_cond(condition):
     >>> count_primes(20)   # 2, 3, 5, 7, 11, 13, 17, 19
     8
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    def count(n):
+        i, count = 1, 0
+        while i <= n:
+            if condition(n, i):
+                count += 1
+            i += 1
+        return count
+    return count
 
 
 
@@ -61,7 +69,9 @@ def both_paths(sofar="S"):
     >>> _ = upup()
     SUU
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    print(sofar)
+    return lambda : both_paths(sofar + 'U'), lambda : both_paths(sofar + 'D') 
 
 
 
@@ -96,8 +106,9 @@ def composite_identity(f, g):
     >>> b1(4)                            # (4 + 1)^2 != 4^2 + 1
     False
     """
-    "*** YOUR CODE HERE ***"
-
+    "*** MY SOLUTION HERE ***"
+    left = compose1(f, g)
+    return lambda x : left(x) == g(f(x))
 
 
 def cycle(f1, f2, f3):
@@ -126,5 +137,15 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
-    "*** YOUR CODE HERE ***"
-
+    "*** MY SOLUTION HERE ***"
+    def repeat(n):
+        func = lambda x : x
+        for i in range(n):
+            if i % 3 == 0:
+                func = compose1(f1, func)
+            elif i % 3 == 1:
+                func = compose1(f2, func)
+            else:
+                func = compose1(f3, func)
+        return func
+    return lambda n : repeat(n)
