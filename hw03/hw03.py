@@ -20,8 +20,9 @@ def composer(func=lambda x: x):
     9
     """
     def func_adder(g):
-        "*** MY SOLUTION HERE ***"
-        
+        "*** YOUR CODE HERE ***"
+        h = lambda x:func(g(x))
+        return composer(h)
     return func, func_adder
 
 
@@ -43,7 +44,10 @@ def g(n):
     >>> check(HW_SOURCE_FILE, 'g', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if n <= 3:
+        return n
+    return g(n - 1) + 2 * g(n - 2) + 3 * g(n - 3)
 
 def g_iter(n):
     """Return the value of G(n), computed iteratively.
@@ -63,7 +67,15 @@ def g_iter(n):
     >>> check(HW_SOURCE_FILE, 'g_iter', ['Recursion'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if n <= 3:
+        return n
+    g1, g2, g3 = 1, 2, 3
+    i = 3
+    while i < n:
+        g1, g2, g3 = g2, g3, 3*g1 + 2*g2 + g3
+        i = i + 1
+    return g3
 
 
 def missing_digits(n):
@@ -93,7 +105,11 @@ def missing_digits(n):
     >>> check(HW_SOURCE_FILE, 'missing_digits', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if not n // 10:
+        return 0
+    diff = n % 10 - (n // 10) % 10
+    return missing_digits(n // 10) + (0 if diff <= 1 else diff - 1)
 
 
 def count_change(total):
@@ -112,7 +128,7 @@ def count_change(total):
     >>> check(HW_SOURCE_FILE, 'count_change', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
 
 
 def print_move(origin, destination):
