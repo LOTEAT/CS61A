@@ -129,6 +129,15 @@ def count_change(total):
     True
     """
     "*** MY SOLUTION HERE ***"
+    def count_change_helper(n, m):
+        if n == 0:
+            return 1
+        elif n < (1 << m):
+            return 0
+        else:
+            return count_change_helper(n, m + 1) + count_change_helper(n - (1 << m), m)
+    return count_change_helper(total, 0)
+        
 
 
 def print_move(origin, destination):
@@ -163,7 +172,14 @@ def move_stack(n, start, end):
     Move the top disk from rod 1 to rod 3
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if n == 1:
+        print_move(start, end)
+        return 
+    transfer = 6 - start - end
+    move_stack(n - 1, start, transfer)
+    print_move(start, end)
+    move_stack(n - 1, transfer, end)
 
 
 from operator import sub, mul
@@ -178,5 +194,7 @@ def make_anonymous_factorial():
     >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    "*** MY SOLUTION HERE ***"
+    from functools import reduce
+    return lambda n: reduce(mul, range(1, n + 1))
 
