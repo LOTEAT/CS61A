@@ -45,9 +45,9 @@ def repeated(f, n):
     True
     """
     "*** MY SOLUTION HERE ***"
-    if n == 1:
-        return f
-    return repeated(f(f), n - 1)
+    if n == 0:
+        return lambda x : x
+    return compose1(f, repeated(f, n - 1))
 
 
 def num_eights(x):
@@ -71,8 +71,10 @@ def num_eights(x):
     ...       ['Assign', 'AugAssign'])
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    "*** MY SOLUTION HERE ***"
+    if x == 0:
+        return 0
+    return num_eights(x // 10) + (1 if x % 10 == 8 else 0)
 
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
@@ -106,5 +108,14 @@ def pingpong(n):
     >>> check(HW_SOURCE_FILE, 'pingpong', ['Assign', 'AugAssign'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    def pingpong_helper(i, state, direction):
+        if i == n:
+            return state
+        if num_eights(i) != 0 or i % 8 == 0:
+            return pingpong_helper(i + 1, state - direction, -direction)
+        else:
+            return pingpong_helper(i + 1, state + direction, direction)
+
+    return pingpong_helper(1, 1, 1)
 
