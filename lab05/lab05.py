@@ -5,8 +5,8 @@ def coords(fn, seq, lower, upper):
     >>> coords(fn, seq, 1, 9)
     [[-2, 4], [1, 1], [3, 9]]
     """
-    "*** YOUR CODE HERE ***"
-    return ______
+    "*** MY SOLUTION HERE ***"
+    return [[x, fn(x)] for x in seq if fn(x) <= upper and fn(x) >= lower]
 
 
 def riffle(deck):
@@ -18,8 +18,9 @@ def riffle(deck):
     >>> riffle(range(20))
     [0, 10, 1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19]
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    "*** MY SOLUTION HERE ***"
+    M = len(deck) // 2 
+    return [deck[k // 2 + M * (k % 2)] for k in range(len(deck))]
 
 
 def berry_finder(t):
