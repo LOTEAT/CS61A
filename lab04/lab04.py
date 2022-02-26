@@ -10,7 +10,8 @@ def reverse_iter(lst):
     >>> cleaned = re.sub(r"#.*\\n", '', re.sub(r'"{3}[\s\S]*?"{3}', '', inspect.getsource(reverse_iter)))
     >>> print("Do not use lst[::-1], lst.reverse(), or reversed(lst)!") if any([r in cleaned for r in ["[::", ".reverse", "reversed"]]) else None
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    return [lst[i] for i in range(len(lst) - 1, -1, -1)]
 
 
 def reverse_recursive(lst):
@@ -22,7 +23,10 @@ def reverse_recursive(lst):
     >>> cleaned = re.sub(r"#.*\\n", '', re.sub(r'"{3}[\s\S]*?"{3}', '', inspect.getsource(reverse_recursive)))
     >>> print("Do not use lst[::-1], lst.reverse(), or reversed(lst)!") if any([r in cleaned for r in ["[::", ".reverse", "reversed"]]) else None
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if not lst:
+        return []
+    return [lst[-1]] + reverse_recursive(lst[: -1])
 
 
 from math import sqrt
@@ -37,7 +41,12 @@ def distance(city_a, city_b):
     >>> distance(city_c, city_d)
     5.0
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    x1, y1 = get_lat(city_a), get_lon(city_a)
+    x2, y2 = get_lat(city_b), get_lon(city_b)
+    return sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+
+
 
 def closer_city(lat, lon, city_a, city_b):
     """
@@ -53,7 +62,11 @@ def closer_city(lat, lon, city_a, city_b):
     >>> closer_city(41.29, 174.78, bucharest, vienna)
     'Bucharest'
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    temp = make_city('temp', lat, lon)
+    dis_a = distance(temp, city_a)
+    dis_b = distance(temp, city_b)
+    return get_name(city_a) if dis_a < dis_b else get_name(city_b)
 
 def check_abstraction():
     """
@@ -161,5 +174,9 @@ def add_chars(w1, w2):
     ...       ['For', 'While', 'Set', 'SetComp']) # Must use recursion
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    "*** MY SOLTION HERE ***"
+    if not w1:
+        return w2
+    if w1[0] == w2[0]:
+        return add_chars(w1[1: ], w2[1: ])
+    return w2[0] + add_chars(w1, w2[1: ])
