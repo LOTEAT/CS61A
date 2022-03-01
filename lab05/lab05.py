@@ -40,8 +40,14 @@ def berry_finder(t):
     >>> berry_finder(t)
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    "*** MY SOLUTION HERE ***"
+    if label(t) == 'berry':
+        return True
+    else:
+        for leaf in branches(t):
+            if berry_finder(leaf):
+                return True
+        return False
 
 def sprout_leaves(t, leaves):
     """Sprout new leaves containing the data in leaves at each leaf in
@@ -76,7 +82,12 @@ def sprout_leaves(t, leaves):
           1
           2
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if is_leaf(t):
+        return tree(label(t), [tree(x) for x in leaves])
+    else:
+        return tree(label(t), [sprout_leaves(branch, leaves) for branch in branches(t)])
+
 
 # Abstraction tests for sprout_leaves and berry_finder
 def check_abstraction():
@@ -162,7 +173,17 @@ def add_trees(t1, t2):
         5
       5
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if is_leaf(t1):
+        return tree(label(t1) + label(t2), branches(t2))
+    elif is_leaf(t2):
+        return tree(label(t1) + label(t2), branches(t1))
+    else:
+        fewer_branch_t, more_branch_t = sorted([branches(t1), branches(t2)], key=len)
+        pad_t1 = fewer_branch_t + [tree(0) for _ in range(len(more_branch_t) - len(fewer_branch_t))]
+        pad_t2 = more_branch_t
+        return tree(label(t1) + label(t2),\
+                [add_trees(b1, b2) for b1, b2 in zip(pad_t1, pad_t2)])
 
 
 def build_successors_table(tokens):
@@ -183,8 +204,11 @@ def build_successors_table(tokens):
     prev = '.'
     for word in tokens:
         if prev not in table:
-            "*** YOUR CODE HERE ***"
-        "*** YOUR CODE HERE ***"
+            "*** MY SOLUTION HERE ***"
+            table[prev] = [word]
+            "*** MY SOLUTION HERE ***"
+        else:
+            table[prev] += [word]
         prev = word
     return table
 
@@ -201,7 +225,10 @@ def construct_sent(word, table):
     import random
     result = ''
     while word not in ['.', '!', '?']:
-        "*** YOUR CODE HERE ***"
+        "*** MYSOLUTION HERE ***"
+        result += ' '
+        result += word
+        word = random.choice(table[word])
     return result.strip() + word
 
 def shakespeare_tokens(path='shakespeare.txt', url='http://composingprograms.com/shakespeare.txt'):
