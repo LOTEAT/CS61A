@@ -70,6 +70,18 @@ def accuracy(typed, reference):
     reference_words = split(reference)
     # BEGIN PROBLEM 3
     "*** MY SOLUTION HERE ***"
+    if not ((len(typed_words) and len(reference_words))):
+        return 0.0
+    match = 0
+    for i in range(0, len(typed_words)):
+        if i == len(reference_words):
+            break
+        if typed_words[i] == reference_words[i]:
+            match += 1
+        i += 1
+    return match / len(typed_words) * 100
+
+    
     # END PROBLEM 3
 
 
@@ -77,7 +89,9 @@ def wpm(typed, elapsed):
     """Return the words-per-minute (WPM) of the TYPED string."""
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    char_num = len(typed)
+    return 60 * char_num / elapsed / 5 
     # END PROBLEM 4
 
 
@@ -87,7 +101,15 @@ def autocorrect(user_word, valid_words, diff_function, limit):
     than LIMIT.
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if user_word in valid_words:
+        return user_word
+    key_fun = lambda s:diff_function(user_word, s, limit)
+    similar_word = min(valid_words, key=key_fun)
+    if diff_function(user_word, similar_word, limit) > limit:
+        return user_word
+    else:
+        return similar_word
     # END PROBLEM 5
 
 
@@ -97,30 +119,48 @@ def shifty_shifts(start, goal, limit):
     their lengths.
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    "*** MY SOLUTION HERE ***"
+    if not start:
+        return len(goal)
+    if not goal:
+        return len(start)
+    if start[0] != goal[0]:
+        if limit == 0:
+            return 1
+        return 1 + shifty_shifts(start[1:], goal[1:], limit - 1)
+    else:
+        return shifty_shifts(start[1:], goal[1:], limit)
     # END PROBLEM 6
 
 
 def meowstake_matches(start, goal, limit):
     """A diff function that computes the edit distance from START to GOAL."""
-    assert False, 'Remove this line'
 
-    if ______________: # Fill in the condition
+    if limit < 0: # Fill in the condition
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        return 0
         # END
 
-    elif ___________: # Feel free to remove or add additional cases
+
+    # add a case
+    elif len(start) == 0 or len(goal) == 0:
+        "*** MY SOLUTION HERE ***"
+        return len(start) + len(goal)
+
+    elif start[0] == goal[0]: # Feel free to remove or add additional cases
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        return meowstake_matches(start[1:], goal[1:], limit)
         # END
 
     else:
-        add_diff = ...  # Fill in these lines
-        remove_diff = ... 
-        substitute_diff = ... 
+        add_diff = meowstake_matches(start, goal[1:], limit - 1)  # Fill in these lines
+        remove_diff = meowstake_matches(start[1:], goal, limit - 1) 
+        substitute_diff = meowstake_matches(start[1:], goal[1:], limit - 1)  
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        return 1 + min(add_diff, remove_diff, substitute_diff)
         # END
 
 
@@ -137,7 +177,16 @@ def final_diff(start, goal, limit):
 def report_progress(typed, prompt, id, send):
     """Send a report of your id and progress so far to the multiplayer server."""
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    correct = 0
+    for t, p in zip(typed, prompt):
+        if t == p:
+            correct += 1
+        else:
+            break
+    progress = correct / len(prompt)
+    send({'id': id, 'progress': progress})
+    return progress
     # END PROBLEM 8
 
 
@@ -164,6 +213,13 @@ def time_per_word(times_per_player, words):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    tpp = []
+    for player in times_per_player:
+        time = []
+        for i in range(len(player) - 1):
+            time.append(player[i + 1] - player[i])
+        tpp.append(time)
+    return game(words, tpp)
     # END PROBLEM 9
 
 
@@ -178,7 +234,16 @@ def fastest_words(game):
     players = range(len(all_times(game)))  # An index for each player
     words = range(len(all_words(game)))    # An index for each word
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    words = all_words(game)
+    times = all_times(game)
+    tot_player = len(times)
+    fastest = [[] for _ in range(tot_player)]
+    for i, word in enumerate(words):
+        word_times = [times[player][i] for player in range(tot_player)]
+        idx = min(range(tot_player), key=lambda x: word_times[x])
+        fastest[idx].append(word)
+    return fastest
     # END PROBLEM 10
 
 
@@ -233,7 +298,7 @@ def key_distance_diff(start, goal, limit):
     goal = goal.lower() #converts the string to lowercase
 
     # BEGIN PROBLEM EC1
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
     # END PROBLEM EC1
 
 def memo(f):
