@@ -299,6 +299,19 @@ def key_distance_diff(start, goal, limit):
 
     # BEGIN PROBLEM EC1
     "*** MY SOLUTION HERE ***"
+    if limit < 0:
+        return float('inf')
+    if len(start) == 0 or len(goal) == 0:
+        return len(start) + len(goal)
+    elif start[0] == goal[0]:
+        return key_distance_diff(start[1:], goal[1:], limit)
+    else:
+        add_diff = 1 + key_distance_diff(start, goal[1:], limit - 1)
+        remove_diff = 1 + key_distance_diff(start[1:], goal, limit - 1) 
+        kd = key_distance[(start[0], goal[0])]
+        substitute_diff = kd + key_distance_diff(start[1:], goal[1:], limit - 1) 
+        # BEGIN
+        return min(add_diff, remove_diff, substitute_diff)
     # END PROBLEM EC1
 
 def memo(f):
@@ -318,7 +331,21 @@ def faster_autocorrect(user_word, valid_words, diff_function, limit):
     """A memoized version of the autocorrect function implemented above."""
 
     # BEGIN PROBLEM EC2
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    mem = {}
+    if user_word in mem:
+        return mem[user_word]
+    else:
+        if user_word in valid_words:
+            res = user_word
+        else:
+            similar_word = min(valid_words, key=lambda w:diff_function(user_word, w, limit))
+            if diff_function(user_word, similar_word, limit) > limit:
+                res = user_word
+            else:
+                res = similar_word
+        mem[user_word] = res
+        return res
     # END PROBLEM EC2
 
 
