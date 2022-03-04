@@ -16,7 +16,14 @@ def choose(paragraphs, select, k):
     the empty string.
     """
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    index = -1
+    for p in paragraphs:
+        if select(p):
+            index += 1
+            if index == k:
+                return p
+    return ""
     # END PROBLEM 1
 
 
@@ -32,9 +39,15 @@ def about(topic):
     """
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    def select(paragraphs):
+        clean_paragraphs = split(remove_punctuation(lower(paragraphs)))
+        for clean_paragraph in clean_paragraphs:
+            if clean_paragraph in topic:
+                return True
+        return False
+    return select
     # END PROBLEM 2
-
 
 def accuracy(typed, reference):
     """Return the accuracy (percentage of words typed correctly) of TYPED
@@ -56,7 +69,7 @@ def accuracy(typed, reference):
     typed_words = split(typed)
     reference_words = split(reference)
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
     # END PROBLEM 3
 
 
