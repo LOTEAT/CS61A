@@ -27,7 +27,7 @@ def close(n, smallest=10, d=10):
       return 0
     no = close(n//10, smallest, d)
     if smallest > n % 10:
-        yes = close(n//10, smallest, d * 10) + n % 10 * d // 10
+        yes = 10 * close(n // 10, d, min(d, n % 10)) + n % 10
         return max(yes, no)
     return no
 
