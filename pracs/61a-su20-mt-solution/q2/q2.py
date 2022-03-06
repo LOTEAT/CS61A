@@ -37,19 +37,17 @@ def schedule(galaxy, sum_to, max_digit):
     >>> schedule('?2??11?', 5, 3)
     ['0200111', '0201110', '0210110', '1200110']
     """
-
-    
     def schedule_helper(galaxy, sum_sofar, index):
-        if index == len(galaxy) and sum_sofar == sum_to:
+        if index >= len(galaxy) and sum_sofar == sum_to:
             return [galaxy]
-        elif index == len(galaxy):
+        elif sum_sofar > sum_to or index >= len(galaxy):
             return []
         elif galaxy[index] != '?':
             return schedule_helper(galaxy, sum_sofar + int(galaxy[index]), index + 1)
         ans = []
         for x in range(max_digit + 1):
             modified_galaxy = galaxy[:index] + str(x) + galaxy[index + 1:]
-            ans.extend(schedule_helper(modified_galaxy, sum_sofar + x, index + 1))
+            ans += schedule_helper(modified_galaxy, sum_sofar + x, index + 1)
         return ans
 
     return schedule_helper(galaxy, 0, 0)
@@ -94,16 +92,16 @@ def schedule(galaxy, sum_to, max_digit):
 #     ['0200111', '0201110', '0210110', '1200110']
 #     """
 #     def schedule_helper(galaxy, sum_sofar, index):
-#         if ______ and ______:
+#         if index >= len(galaxy) and sum_sofar == sum_to:
 #             return [galaxy]
-#         elif ______:
+#         elif sum_sofar > sum_to or index >= len(galaxy):
 #             return []
-#         elif ______:
-#             return ______
+#         elif galaxy[index] != '?':
+#             return schedule_helper(galaxy, sum_sofar + int(galaxy[index]), index + 1)
 #         ans = []
-#         for x in ______:
-#             modified_galaxy = ______
-#             ______
+#         for x in range(max_digit + 1):
+#             modified_galaxy = galaxy[:index] + str(x) + galaxy[index + 1:]
+#             ans += schedule_helper(modified_galaxy, sum_sofar + x, index + 1)
 #         return ans
 
-#     return ______
+#     return schedule_helper(galaxy, 0, 0)
