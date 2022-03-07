@@ -32,5 +32,12 @@ def make_generators_generator(g):
     6
     9
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    def gen_helper(generators):
+        yield from generators
+    gen = g()
+    generators = []
+    for item in gen:
+        generators.append(item)
+        yield gen_helper(generators)
 

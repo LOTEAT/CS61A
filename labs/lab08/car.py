@@ -28,4 +28,3 @@ class Car(object):
     def fill_gas(self):
         self.gas += 20
         return 'Gas level: ' + str(self.gas)
-
