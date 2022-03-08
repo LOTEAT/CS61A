@@ -57,20 +57,29 @@ class VendingMachine:
         self.stock = 0
 
     def add_funds(self, funds):
-        self.funds +=funds
-        print('Current balance: $%d' %self.funds)
+        if self.stock == 0:
+            return 'Inventory empty. Restocking required. Here is your $%d.' %funds
+        else:
+            self.funds +=funds
+            return 'Current balance: $%d' %self.funds
     
     def restock(self, num):
         self.stock += num
-        print('Current %s stock: %d' %(self.product, self.stock))
+        return 'Current %s stock: %d' %(self.product, self.stock)
 
     def vend(self):
-        total = self.stock * self.price
-        if self.funds < total:
-            print('You must add $10 more funds.')
+        if self.stock == 0:
+            return 'Inventory empty. Restocking required.'
+        elif self.funds < self.price:
+            return 'You must add $%d more funds.' %(self.price - self.funds)
         else:
-            print('Here is your %s.' %self.product)
-            self.funds -= total
+            self.stock -= 1
+            change = self.funds - self.price
+            self.funds = 0
+            if change:
+                return 'Here is your %s and $%d change.' %(self.product, change)
+            else:
+                return 'Here is your %s.' %self.product
 
 
 
