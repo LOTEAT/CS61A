@@ -118,17 +118,21 @@ class Mint:
         self.update()
 
     def create(self, kind):
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        return kind(self.year)
 
     def update(self):
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        self.year = Mint.current_year
 
 class Coin:
     def __init__(self, year):
         self.year = year
 
     def worth(self):
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        time = Mint.current_year - self.year
+        return self.cents + (0 if time < 50 else time - 50) 
 
 class Nickel(Coin):
     cents = 5
@@ -162,7 +166,11 @@ def is_bst(t):
     >>> is_bst(t7)
     False
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if len(t.branches) <= 1:
+        return True
+    root_node = t.label
+    
 
 
 def store_digits(n):
