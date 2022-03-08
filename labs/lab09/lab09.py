@@ -7,7 +7,10 @@ def convert_link(link):
     >>> convert_link(Link.empty)
     []
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if link is Link.empty:
+        return []
+    return [link.first,] + convert_link(link.rest)
 
 
 def every_other(s):
@@ -27,7 +30,11 @@ def every_other(s):
     >>> singleton
     Link(4)
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if s == Link.empty or s.rest == Link.empty:
+        return
+    s.rest = s.rest.rest
+    return every_other(s.rest)
 
 
 def label_squarer(t):
@@ -38,7 +45,13 @@ def label_squarer(t):
     >>> t
     Tree(1, [Tree(9, [Tree(25)]), Tree(49)])
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    t.label *= t.label
+    if t.is_leaf():
+        return
+    for branch in t.branches:
+        label_squarer(branch)
+
 
 
 def cumulative_mul(t):
@@ -50,7 +63,16 @@ def cumulative_mul(t):
     >>> t
     Tree(105, [Tree(15, [Tree(5)]), Tree(7)])
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if t.is_leaf():
+        return t.label
+    for branch in t.branches:
+        cumulative_mul(branch)
+    temp = t.label
+    for b in t.branches:
+        temp *= b.label
+    t.label = temp
+    
 
 
 def has_cycle(link):
@@ -67,7 +89,14 @@ def has_cycle(link):
     >>> has_cycle(u)
     False
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    flag = link
+    while link is not Link.empty:
+        link = link.rest
+        if link is flag:
+            return True
+    return False
+
 
 def has_cycle_constant(link):
     """Return whether link contains a cycle.
@@ -80,7 +109,14 @@ def has_cycle_constant(link):
     >>> has_cycle_constant(t)
     False
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    flag = link
+    while link is not Link.empty:
+        link = link.rest
+        if link is flag:
+            return True
+    return False
+
 
 
 def reverse_other(t):
@@ -96,7 +132,16 @@ def reverse_other(t):
     >>> t
     Tree(1, [Tree(8, [Tree(3, [Tree(5), Tree(4)]), Tree(6, [Tree(7)])]), Tree(2)])
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if t.is_leaf():
+        return 
+    label_list = []
+    for branch in t.branches:
+        label_list.append(branch.label)
+    for branch, new_label in zip(t.branches, reversed(label_list)):
+        branch.label = new_label
+        for bb in branch.branches:
+            reverse_other(bb)
 
 
 class Link:
@@ -215,3 +260,7 @@ class Tree:
             return tree_str
         return print_tree(self).rstrip()
 
+
+
+t = Tree(1, [Tree(3, [Tree(5)]), Tree(7)])
+cumulative_mul(t)
