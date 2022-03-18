@@ -167,10 +167,41 @@ def is_bst(t):
     False
     """
     "*** MY SOLUTION HERE ***"
-    if len(t.branches) <= 1:
+
+    def bst_min(t):
+        if t.is_leaf():
+            return t.label
+        elif len(t.branches) == 1:
+            if t.label > t.branches[0].label:
+                return bst_min(t.branches[0])
+            else:
+                return t.label
+        else:
+            return bst_min(t.branches[0])
+
+    def bst_max(t):
+        if t.is_leaf():
+            return t.label
+        elif len(t.branches) == 1:
+            if t.label < t.branches[0].label:
+                return bst_max(t.branches[0])
+            else:
+                return t.label
+        else:
+            return bst_max(t.branches[1])
+
+    if t.is_leaf():
         return True
-    root_node = t.label
-    
+    if len(t.branches) == 1:
+        if t.label > t.branches[0].label:
+            return is_bst(t.branches[0]) and t.label >= bst_max(t.branches[0])
+        else:
+            return is_bst(t.branches[0]) and t.label < bst_min(t.branches[0])
+    elif len(t.branches) == 2:
+        le, ri = t.branches
+        return is_bst(le) and is_bst(ri) and (bst_max(le) <= t.label < bst_min(ri))
+    else:
+        return False
 
 
 def store_digits(n):
@@ -188,7 +219,12 @@ def store_digits(n):
     >>> cleaned = re.sub(r"#.*\\n", '', re.sub(r'"{3}[\s\S]*?"{3}', '', inspect.getsource(store_digits)))
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    digits = Link.empty
+    while n:
+        digits = Link(n % 10, digits)
+        n //= 10
+    return digits
 
 
 def path_yielder(t, value):
@@ -226,12 +262,13 @@ def path_yielder(t, value):
     [[0, 2], [0, 2, 1, 2]]
     """
 
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if t.label == value:
+        yield [value]
+    for b in t.branches:
+        for path in path_yielder(b, value):
+            yield [t.label] + path
 
-    for _______________ in _________________:
-        for _______________ in _________________:
-
-            "*** YOUR CODE HERE ***"
 
 
 def remove_all(link , value):
@@ -251,7 +288,14 @@ def remove_all(link , value):
     >>> print(l1)
     <0 1>
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if link.rest == Link.empty:
+        return
+    if link.rest.first == value:
+        link.rest = link.rest.rest
+        remove_all(link, value)
+    else:
+        remove_all(link.rest, value)
 
 
 def deep_map(f, link):
@@ -267,7 +311,14 @@ def deep_map(f, link):
     >>> print(deep_map(lambda x: 2 * x, Link(s, Link(Link(Link(5))))))
     <<2 <4 6> 8> <<10>>>
     """
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    if link == Link.empty:
+        return Link.empty
+    if isinstance(link.first, Link):
+        first = deep_map(f, link.first)
+    else:
+        first = f(link.first)
+    return Link(first, deep_map(f, link.rest))
 
 
 class Tree:
