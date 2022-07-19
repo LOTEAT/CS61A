@@ -5,10 +5,9 @@
         )
     )
 )
-
 (define (split-at lst n)
   'MY-SOLUTION-HERE
-   (help nil lst n)
+  (help nil lst n)
 )
 
 
@@ -17,4 +16,7 @@
 	   (map (lambda (case) (cons (list 'eq? expr (car case)) (cdr case))) 
     			cases))
 )
-
+(define x 'b)
+(switch x ((a (print 'a))
+                (b (print 'b))
+                (c (print 'c))))
