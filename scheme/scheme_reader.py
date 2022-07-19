@@ -144,7 +144,10 @@ def scheme_read(src):
         # END PROBLEM 1
     elif val in quotes:
         # BEGIN PROBLEM 6
-        "*** YOUR HERE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        first = quotes[val]
+        rest = Pair(scheme_read(src), nil)
+        return Pair(first, rest)
         # END PROBLEM 6
     elif val not in DELIMITERS:
         return val
