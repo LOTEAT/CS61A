@@ -35,7 +35,13 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
         return SPECIAL_FORMS[first](rest, env)
     else:
         # BEGIN PROBLEM 4
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        operator = scheme_eval(first, env)
+        validate_procedure(operator)
+        if isinstance(operator, MacroProcedure):
+            return operator.apply_macro(rest, env)
+        operands = rest.map(lambda x : scheme_eval(x, env))
+        return scheme_apply(operator, operands, env)
         # END PROBLEM 4
 
 def self_evaluating(expr):
@@ -92,13 +98,18 @@ class Frame(object):
     def define(self, symbol, value):
         """Define Scheme SYMBOL to have VALUE."""
         # BEGIN PROBLEM 2
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        self.bindings[symbol] = value
         # END PROBLEM 2
 
     def lookup(self, symbol):
         """Return the value bound to SYMBOL. Errors if SYMBOL is not found."""
         # BEGIN PROBLEM 2
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        if symbol in self.bindings.keys():
+            return self.bindings[symbol]
+        elif self.parent:
+            return self.parent.lookup(symbol)
         # END PROBLEM 2
         raise SchemeError('unknown identifier: {0}'.format(symbol))
 
@@ -153,7 +164,17 @@ class BuiltinProcedure(Procedure):
         # Convert a Scheme list to a Python list
         python_args = []
         # BEGIN PROBLEM 3
-        "*** YOUR CODE HERE ***"
+        "*** MY SOLUTION HERE ***"
+        curr = args
+        while curr is not nil:
+            python_args.append(curr.first)
+            curr = curr.rest
+        if self.use_env:
+            python_args.append(env)
+        try:
+            return self.fn(*python_args)
+        except TypeError as e:
+            raise SchemeError('wrong number of arguments were passed')
         # END PROBLEM 3
 
 class LambdaProcedure(Procedure):
