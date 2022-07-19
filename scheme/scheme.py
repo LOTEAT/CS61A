@@ -414,7 +414,11 @@ def do_cond_form(expressions, env):
             test = scheme_eval(clause.first, env)
         if is_true_primitive(test):
             # BEGIN PROBLEM 13
-            "*** YOUR CODE HERE ***"
+            "*** MY SOLUTION HERE ***"
+            if clause.rest is nil:
+                return test
+            else:
+                return eval_all(clause.rest, env)
             # END PROBLEM 13
         expressions = expressions.rest
 
@@ -438,7 +442,13 @@ def make_let_frame(bindings, env):
         raise SchemeError('bad bindings list in let form')
     names, values = nil, nil
     # BEGIN PROBLEM 14
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    while bindings is not nil:
+        binding = bindings.first
+        validate_form(binding, 2, 2)
+        names, values = Pair(binding.first, names), Pair(scheme_eval(binding.rest.first, env), values)
+        bindings = bindings.rest
+    validate_formals(names)
     # END PROBLEM 14
     return env.make_child_frame(names, values)
 
@@ -564,7 +574,12 @@ class MuProcedure(Procedure):
         self.body = body
 
     # BEGIN PROBLEM 15
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    def make_call_frame(self, args, env):
+        """Make a frame that binds my formal parameters to ARGS, a Scheme list
+        of values, for a dynamically-scoped call evaluated in my parent environment."""
+        new_env = env.make_child_frame(self.formals, args)
+        return new_env
     # END PROBLEM 15
 
     def __str__(self):
@@ -580,7 +595,8 @@ def do_mu_form(expressions, env):
     formals = expressions.first
     validate_formals(formals)
     # BEGIN PROBLEM 18
-    "*** YOUR CODE HERE ***"
+    "*** MY SOLUTION HERE ***"
+    return MuProcedure(formals, expressions.rest)
     # END PROBLEM 18
 
 SPECIAL_FORMS['mu'] = do_mu_form
